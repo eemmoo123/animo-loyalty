@@ -4,7 +4,135 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Animo | مخبز ومقهى</title>
-  <link rel="stylesheet" href="style.css">
+  <style>
+    body {
+      background-color: #1a1614;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      color: #f5f0eb;
+      margin: 0;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .wrap {
+      width: 100%;
+      max-width: 400px;
+    }
+    .brandbar {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 24px;
+    }
+    .brandbar__mark {
+      color: #dfb15b;
+      font-size: 18px;
+    }
+    .brandbar__name {
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+    }
+    .card {
+      background-color: #fcf9f2;
+      color: #2c2421;
+      border-radius: 24px;
+      padding: 28px 20px;
+      text-align: center;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    }
+    .card__title {
+      font-size: 26px;
+      font-weight: 800;
+      margin: 0;
+    }
+    .card__sub-ar {
+      font-size: 14px;
+      color: #8c7a6b;
+      margin-top: 2px;
+      margin-bottom: 15px;
+    }
+    .card__desc-en {
+      font-size: 14px;
+      color: #594a3c;
+      font-weight: 600;
+      margin-top: 10px;
+    }
+    .card__desc-ar {
+      font-size: 13px;
+      color: #8c7a6b;
+      margin-bottom: 20px;
+    }
+    .stamps-row {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin: 20px 0;
+    }
+    .stamp-slot {
+      width: 44px;
+      height: 44px;
+      border: 2px dashed #b5a493;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      color: #dfb15b;
+    }
+    .stamp-slot.filled {
+      border-style: solid;
+      border-color: #dfb15b;
+      background-color: #f3e9d2;
+    }
+    .card__hint-en {
+      font-size: 13px;
+      color: #735d48;
+      font-weight: 500;
+    }
+    .card__hint-ar {
+      font-size: 12px;
+      color: #8c7a6b;
+      margin-bottom: 15px;
+    }
+    .card__divider {
+      height: 1px;
+      background-color: #e6ded3;
+      margin: 20px 0;
+      border-top: 2px dotted #d1c7b7;
+    }
+    .qr-wrap {
+      background: white;
+      padding: 15px;
+      border-radius: 16px;
+      display: inline-block;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+      margin-bottom: 10px;
+    }
+    .card__footer-text {
+      font-size: 12px;
+      color: #8c7a6b;
+      margin: 10px 0 2px 0;
+    }
+    .card__footer-ar {
+      font-size: 11px;
+      color: #a39281;
+      margin-bottom: 5px;
+    }
+    .app-note {
+      font-size: 12px;
+      color: #b5a493;
+      text-align: center;
+      margin-top: 20px;
+    }
+    .app-note-ar {
+      font-size: 11px;
+      color: #8c7a6b;
+      text-align: center;
+      margin-top: 4px;
+    }
+  </style>
 </head>
 <body>
   <div class="wrap">
@@ -16,10 +144,10 @@
     <!-- LOYALTY CARD -->
     <div class="card">
       <h1 class="card__title">Loyalty Card</h1>
-      <p class="card__sub-ar">بطاقة الولاء</p>
+      <div class="card__sub-ar">بطاقة الولاء</div>
       
-      <p class="card__desc-en">Five stamps. Sixth cup, on us.</p>
-      <p class="card__desc-ar">خمسة أختام. الكوب السادس علينا.</p>
+      <div class="card__desc-en">Five stamps. Sixth cup, on us.</div>
+      <div class="card__desc-ar">خمسة أختام. الكوب السادس علينا.</div>
 
       <div id="stampsRow" class="stamps-row">
         <div class="stamp-slot"></div>
@@ -29,9 +157,9 @@
         <div class="stamp-slot"></div>
       </div>
 
-      <div id="statusMsg" class="card__hint">
-        <span>Get a stamp with every cup</span>
-        <span class="hint-ar">احصل على ختم مع كل كوب</span>
+      <div id="statusMsg">
+        <div class="card__hint-en">Get a stamp with every cup</div>
+        <div class="card__hint-ar">احصل على ختم مع كل كوب</div>
       </div>
 
       <div class="card__divider"></div>
@@ -40,16 +168,63 @@
         <div id="qrcode"></div>
       </div>
 
-      <p class="card__footer-text">Show this code to your barista at checkout</p>
-      <p class="card__footer-ar">اعرض هذا الكود للباريستا عند المحاسبة</p>
+      <div class="card__footer-text">Show this code to your barista at checkout</div>
+      <div class="card__footer-ar">اعرض هذا الكود للباريستا عند المحاسبة</div>
     </div>
 
-    <p class="app-note">Added to your home screen, this opens straight to your card — no app store, no login.</p>
-    <p class="app-note-ar">أضفها لشاشة جهازك الرئيسية لتفتح مباشرة دون تطبيق أو تسجل دخول</p>
+    <div class="app-note">Added to your home screen, this opens straight to your card — no app store, no login.</div>
+    <div class="app-note-ar">أضفها لشاشة جهازك الرئيسية لتفتح مباشرة دون تطبيق أو تسجل دخول</div>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
-  <script src="app.js?v=3"></script>
+  <script>
+    let customerId = localStorage.getItem('animo_customer_id');
+    if (!customerId) {
+      customerId = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+        let r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+        return v.toString(16);
+      });
+      localStorage.setItem('animo_customer_id', customerId);
+    }
+
+    new QRCode(document.getElementById("qrcode"), {
+      text: customerId,
+      width: 160,
+      height: 160
+    });
+
+    const supabaseUrl = 'https://zljlwnqphtbowtjazyqu.supabase.co';
+    const supabaseKey = 'sb_publishable_5Q-Zd5dkLvuKqwwRUF6zew_952ZJtqZ';
+    const client = supabase.createClient(supabaseUrl, supabaseKey);
+
+    async function fetchCard() {
+      const { data, error } = await client
+        .from('customer_cards')
+        .select('stamps')
+        .eq('customer_id', customerId)
+        .single();
+
+      let stamps = data ? data.stamps : 0;
+      updateStampsUI(stamps);
+    }
+
+    function updateStampsUI(stamps) {
+      const row = document.getElementById('stampsRow');
+      const slots = row.getElementsByClassName('stamp-slot');
+      for (let i = 0; i < 5; i++) {
+        if (i < stamps) {
+          slots[i].classList.add('filled');
+          slots[i].textContent = '✓';
+        } else {
+          slots[i].classList.remove('filled');
+          slots[i].textContent = '';
+        }
+      }
+    }
+
+    fetchCard();
+    setInterval(fetchCard, 3000);
+  </script>
 </body>
 </html>
