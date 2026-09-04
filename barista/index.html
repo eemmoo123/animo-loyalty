@@ -71,15 +71,27 @@
         { facingMode: "environment" },
         { fps: 10, qrbox: { width: 240, height: 240 } },
         async (decodedText) => {
-          // منع المعالجة المتكررة أثناء قراءة نفس الكود
           if (isProcessing) return;
           isProcessing = true;
 
-          // تنظيف نص الكود المقروء من أي مسافات أو زوائد مخفية
-          const customerId = decodedText ? decodedText.trim() : '';
-          if (!customerId) {
+          let rawText = decodedText ? decodedText.trim() : '';
+          if (!rawText) {
             isProcessing = false;
             return;
+          }
+
+          // معالجة ذكية: إذا كان الكود المقروء عبارة عن رابط يحتوي على ?id= استخرج الـ ID مباشرة، وإلا فخذ النص كما هو
+          let customerId = rawText;
+          try {
+            if (rawText.includes('http://') || rawText.includes('https://')) {
+              const urlObj = new URL(rawText);
+              const idParam = urlObj.searchParams.get('id');
+              if (idParam) {
+                customerId = idParam;
+              }
+            }
+          } catch (e) {
+            console.error("URL parse error:", e);
           }
 
           const pin = sessionStorage.getItem('animo_staff_pin');
@@ -108,7 +120,6 @@
             }
           }
 
-          // إعادة السماح بالمسح بعد ثانيتين دون إغلاق الكاميرا
           setTimeout(() => {
             resEl.classList.remove('result--show');
             isProcessing = false;
