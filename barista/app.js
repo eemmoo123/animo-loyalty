@@ -1,4 +1,4 @@
-(function () {
+document.addEventListener("DOMContentLoaded", function () {
   "use strict";
 
   const SUPABASE_URL = "https://zljlwnqphtbowtjazyqu.supabase.co";
@@ -6,12 +6,8 @@
 
   let sb = null;
   function getSupabase() {
-    if (!sb) {
-      if (typeof supabase !== "undefined" && supabase.createClient) {
-        sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-      } else if (window.supabase && window.supabase.createClient) {
-        sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-      }
+    if (!sb && window.supabase) {
+      sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
     }
     return sb;
   }
@@ -20,9 +16,9 @@
   const RESCAN_COOLDOWN_MS = 2500;
 
   const pinPanel = document.getElementById("pinPanel");
-  const pinForm = document.getElementById("pinForm");
   const pinInput = document.getElementById("pinInput");
   const pinError = document.getElementById("pinError");
+  const unlockBtn = document.getElementById("unlockBtn");
   const scanPanel = document.getElementById("scanPanel");
   const lockBtn = document.getElementById("lockBtn");
   const resultEl = document.getElementById("result");
@@ -100,7 +96,7 @@
   async function startScanner() {
     try {
       if (typeof Html5Qrcode === "undefined") {
-        showResult("error", "Scanner script not loaded.");
+        showResult("error", "Scanner script loading...");
         return;
       }
       html5QrCode = new Html5Qrcode("reader");
@@ -143,11 +139,13 @@
     }
   }
 
-  if (pinForm) {
-    pinForm.addEventListener("submit", (e) => {
-      e.preventDefault();
+  if (unlockBtn) {
+    unlockBtn.addEventListener("click", function () {
       const pin = pinInput ? pinInput.value.trim() : "";
-      if (!pin) return;
+      if (!pin) {
+        if (pinError) pinError.textContent = "Please enter PIN";
+        return;
+      }
       if (pinError) pinError.textContent = "";
       sessionStorage.setItem(PIN_SESSION_KEY, pin);
       unlockScanner();
@@ -161,4 +159,4 @@
   if (sessionStorage.getItem(PIN_SESSION_KEY)) {
     unlockScanner();
   }
-})();
+});
