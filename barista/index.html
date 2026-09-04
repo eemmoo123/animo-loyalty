@@ -1,70 +1,47 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1" />
-<title>Animo — Staff Scanner</title>
-<meta name="robots" content="noindex, nofollow" />
-<meta name="theme-color" content="#1B1410" />
-<link rel="apple-touch-icon" href="../icons/icon-192.png" />
-<link rel="icon" href="../icons/icon-192.png" />
-
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="style.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Animo Staff</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
-<main class="wrap">
-
-  <header class="brandbar">
-    <span class="brandbar__mark" aria-hidden="true">✦</span>
-    <span class="brandbar__name">Animo</span>
-    <span class="brandbar__tag">Staff</span>
-  </header>
-
-  <!-- PIN GATE -->
-  <section class="panel" id="pinPanel">
-    <h1 class="panel__title">Enter staff PIN</h1>
-    <p class="panel__sub">Unlocks the scanner for this device until you close the tab.</p>
-    <form id="pinForm" autocomplete="off">
-      <input
-        id="pinInput"
-        class="pin-input"
-        type="password"
-        inputmode="numeric"
-        pattern="[0-9]*"
-        maxlength="8"
-        placeholder="••••"
-        autofocus
-      />
-      <button type="submit" class="btn btn--primary">Unlock</button>
-    </form>
-    <p class="panel__error" id="pinError" aria-live="assertive"></p>
-  </section>
-
-  <!-- SCANNER (hidden until unlocked) -->
-  <section class="panel panel--scanner hidden" id="scanPanel">
-    <div class="scan-frame">
-      <div id="reader"></div>
-      <div class="scan-frame__corner scan-frame__corner--tl"></div>
-      <div class="scan-frame__corner scan-frame__corner--tr"></div>
-      <div class="scan-frame__corner scan-frame__corner--bl"></div>
-      <div class="scan-frame__corner scan-frame__corner--br"></div>
+  <div class="wrap">
+    <div class="brandbar">
+      <span class="brandbar__mark">✦</span>
+      <span class="brandbar__name">Animo</span>
+      <span class="brandbar__tag">Staff</span>
     </div>
-    <p class="scan-hint">Point the camera at the customer's QR code</p>
-    <button class="btn btn--ghost" id="lockBtn">Lock scanner</button>
-  </section>
 
-  <!-- RESULT -->
-  <div class="result" id="result" role="status" aria-live="assertive"></div>
+    <!-- PIN PANEL -->
+    <div id="pinPanel" class="panel">
+      <h1 class="panel__title">Enter staff PIN</h1>
+      <p class="panel__sub">Unlocks the scanner for this device</p>
+      
+      <input type="password" id="pinInput" class="pin-input" placeholder="••••" pattern="[0-9]*" inputmode="numeric">
+      <button type="button" id="unlockBtn" class="btn btn--primary" style="margin-top: 15px; width: 100%;">Unlock</button>
+      <div id="pinError" class="panel__error"></div>
+    </div>
 
-</main>
+    <!-- SCANNER PANEL -->
+    <div id="scanPanel" class="panel panel--scanner hidden">
+      <div class="scan-frame">
+        <div id="reader"></div>
+        <div class="scan-frame__corner scan-frame__corner--tl"></div>
+        <div class="scan-frame__corner scan-frame__corner--tr"></div>
+        <div class="scan-frame__corner scan-frame__corner--bl"></div>
+        <div class="scan-frame__corner scan-frame__corner--br"></div>
+      </div>
+      <p class="scan-hint">Scan customer QR code</p>
+      <button type="button" id="lockBtn" class="btn btn--ghost">Lock scanner</button>
+    </div>
+  </div>
 
-<script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
-<script src="/config.js"></script>
-<script src="app.js?v=3"></script>
+  <div id="result" class="result"></div>
+
+  <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+  <script src="app.js?v=4"></script>
 </body>
 </html>
