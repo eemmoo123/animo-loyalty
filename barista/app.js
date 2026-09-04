@@ -1,4 +1,4 @@
-document.addEventListener("DOMContentLoaded", function () {
+window.addEventListener("load", function () {
   "use strict";
 
   const SUPABASE_URL = "https://zljlwnqphtbowtjazyqu.supabase.co";
@@ -139,17 +139,24 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 
-  if (unlockBtn) {
-    unlockBtn.addEventListener("click", function () {
-      const pin = pinInput ? pinInput.value.trim() : "";
-      if (!pin) {
-        if (pinError) pinError.textContent = "Please enter PIN";
-        return;
+  function trySubmit() {
+    const pin = pinInput ? pinInput.value.trim() : "";
+    if (!pin) return;
+    sessionStorage.setItem(PIN_SESSION_KEY, pin);
+    unlockScanner();
+  }
+
+  // التفعيل التلقائي بمجرد كتابة 4 أرقام
+  if (pinInput) {
+    pinInput.addEventListener("input", function () {
+      if (this.value.trim().length === 4) {
+        trySubmit();
       }
-      if (pinError) pinError.textContent = "";
-      sessionStorage.setItem(PIN_SESSION_KEY, pin);
-      unlockScanner();
     });
+  }
+
+  if (unlockBtn) {
+    unlockBtn.addEventListener("click", trySubmit);
   }
 
   if (lockBtn) {
