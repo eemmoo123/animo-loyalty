@@ -1,233 +1,223 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Animo | مخبز ومقهى</title>
-  <style>
-    body {
-      background-color: #1a1614;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      color: #f5f0eb;
-      margin: 0;
-      padding: 20px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-    .wrap {
-      width: 100%;
-      max-width: 400px;
-    }
-    .brandbar {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      margin-bottom: 24px;
-    }
-    .brandbar__mark {
-      color: #dfb15b;
-      font-size: 18px;
-    }
-    .brandbar__name {
-      font-size: 20px;
-      font-weight: 700;
-      letter-spacing: 0.5px;
-    }
-    .card {
-      background-color: #fcf9f2;
-      color: #2c2421;
-      border-radius: 24px;
-      padding: 28px 20px;
-      text-align: center;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-    }
-    .card__title {
-      font-size: 26px;
-      font-weight: 800;
-      margin: 0;
-    }
-    .card__sub-ar {
-      font-size: 14px;
-      color: #8c7a6b;
-      margin-top: 2px;
-      margin-bottom: 15px;
-    }
-    .card__desc-en {
-      font-size: 14px;
-      color: #594a3c;
-      font-weight: 600;
-      margin-top: 10px;
-    }
-    .card__desc-ar {
-      font-size: 13px;
-      color: #8c7a6b;
-      margin-bottom: 20px;
-    }
-    .stamps-row {
-      display: flex;
-      justify-content: center;
-      gap: 8px;
-      margin: 20px 0;
-    }
-    .stamp-slot {
-      width: 44px;
-      height: 44px;
-      border: 2px dashed #b5a493;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: bold;
-      color: #dfb15b;
-    }
-    .stamp-slot.filled {
-      border-style: solid;
-      border-color: #dfb15b;
-      background-color: #f3e9d2;
-    }
-    .card__hint-en {
-      font-size: 13px;
-      color: #735d48;
-      font-weight: 500;
-    }
-    .card__hint-ar {
-      font-size: 12px;
-      color: #8c7a6b;
-      margin-bottom: 15px;
-    }
-    .card__divider {
-      height: 1px;
-      background-color: #e6ded3;
-      margin: 20px 0;
-      border-top: 2px dotted #d1c7b7;
-    }
-    .qr-wrap {
-      background: white;
-      padding: 15px;
-      border-radius: 16px;
-      display: inline-block;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-      margin-bottom: 10px;
-    }
-    .card__footer-text {
-      font-size: 12px;
-      color: #8c7a6b;
-      margin: 10px 0 2px 0;
-    }
-    .card__footer-ar {
-      font-size: 11px;
-      color: #a39281;
-      margin-bottom: 5px;
-    }
-    .app-note {
-      font-size: 12px;
-      color: #b5a493;
-      text-align: center;
-      margin-top: 20px;
-    }
-    .app-note-ar {
-      font-size: 11px;
-      color: #8c7a6b;
-      text-align: center;
-      margin-top: 4px;
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Animo | مخبز ومقهى</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Manrope:wght@400;500;600;700&family=El+Messiri:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cream:#FBF3E6;
+    --cream-deep:#F1E4CF;
+    --ink:#241A11;
+    --ink-soft:#3B2C1E;
+    --green:#2E4028;
+    --green-deep:#1C2916;
+    --brass:#B8905A;
+    --brass-soft:#E7C793;
+    --muted:#8C7A62;
+    --line:#E2D3B8;
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  html,body{margin:0;padding:0;}
+  body{
+    min-height:100vh;
+    background:
+      radial-gradient(120% 90% at 50% -10%, #2B2015 0%, #1A130C 45%, #120C08 100%);
+    font-family:'El Messiri','Manrope',sans-serif;
+    color:var(--cream);
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    padding:32px 18px 44px;
+  }
+  .wrap{width:100%;max-width:400px;}
+
+  /* ---------- Brand bar ---------- */
+  .brandbar{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:10px;
+    margin-bottom:26px;
+  }
+  .brandbar__mark{
+    width:34px;height:34px;border-radius:50%;
+    overflow:hidden;
+    box-shadow:0 0 0 1px rgba(231,199,147,0.35);
+    flex-shrink:0;
+  }
+  .brandbar__mark img{width:100%;height:100%;object-fit:cover;display:block;}
+  .brandbar__text{display:flex;flex-direction:column;line-height:1;font-family:'Fraunces',serif;}
+  .brandbar__name{font-size:19px;font-weight:600;letter-spacing:0.3px;color:var(--brass-soft);direction:ltr;}
+  .brandbar__tag{font-family:'Manrope',sans-serif;font-size:9px;font-weight:600;letter-spacing:2px;color:#9C8B72;margin-top:3px;direction:ltr;}
+
+  /* ---------- Card ---------- */
+  .card{
+    position:relative;
+    background:var(--cream);
+    color:var(--ink);
+    border-radius:26px;
+    padding:34px 24px 28px;
+    text-align:center;
+    box-shadow:0 24px 48px -16px rgba(0,0,0,0.55), 0 2px 0 rgba(255,255,255,0.4) inset;
+    border:1px solid rgba(255,255,255,0.5);
+    overflow:hidden;
+  }
+
+  .card__eyebrow{font-family:'Fraunces',serif;font-style:italic;font-size:13px;color:var(--brass);margin:0 0 4px;}
+  .card__title{font-family:'El Messiri',sans-serif;font-size:25px;font-weight:700;color:var(--green-deep);margin:0;}
+  .card__sub-en{font-family:'Manrope',sans-serif;direction:ltr;font-size:11px;letter-spacing:1.5px;color:var(--muted);margin-top:5px;margin-bottom:16px;text-transform:uppercase;}
+
+  .card__desc-ar{font-size:15px;font-weight:600;color:var(--ink-soft);margin-top:2px;}
+  .card__desc-en{direction:ltr;font-family:'Manrope',sans-serif;font-size:12px;color:var(--muted);margin-top:3px;margin-bottom:20px;}
+
+  /* ---------- Stamps grid ---------- */
+  .stamps-grid{
+    display:grid;
+    grid-template-columns:repeat(5, 1fr);
+    gap:10px;
+    margin:6px 0 16px;
+    max-width:300px;
+    margin-left:auto;
+    margin-right:auto;
+  }
+  .stamp-slot{
+    position:relative;
+    aspect-ratio:1;
+    border-radius:50%;
+    border:1.5px dashed var(--line);
+    display:flex;align-items:center;justify-content:center;
+    background:var(--cream-deep);
+    cursor:pointer;
+    transition:transform .2s ease, background .35s ease, border-color .35s ease, box-shadow .2s ease;
+  }
+  .stamp-slot:hover{transform:translateY(-2px);box-shadow:0 6px 14px -6px rgba(46,64,40,0.35);}
+  .stamp-slot:active{transform:scale(0.92);}
+  .stamp-slot svg{width:44%;height:44%;}
+  .stamp-slot .cup-outline{stroke:var(--muted);fill:none;transition:stroke .3s ease;}
+  .stamp-slot.filled{
+    border:1.5px solid var(--brass);
+    background:radial-gradient(circle at 35% 30%, var(--brass-soft), var(--brass) 85%);
+    cursor:default;
+  }
+  .stamp-slot.filled .cup-outline{stroke:var(--green-deep);fill:var(--green-deep);}
+  .stamp-slot.filled:hover{transform:none;box-shadow:none;}
+  .stamp-slot.just-filled{animation:stampPop .45s cubic-bezier(.34,1.56,.64,1);}
+  .stamp-slot.next-up{border-style:solid;border-color:var(--brass-soft);}
+  @keyframes stampPop{
+    0%{transform:scale(1);}
+    45%{transform:scale(1.28);}
+    100%{transform:scale(1);}
+  }
+
+  .card__hint-ar{font-size:13.5px;font-weight:600;color:var(--ink-soft);transition:color .2s ease;}
+  .card__hint-en{direction:ltr;font-family:'Manrope',sans-serif;font-size:11px;color:var(--muted);margin-top:2px;margin-bottom:4px;}
+  .card__hint-ar.is-ready{color:var(--brass);}
+
+  /* ---------- Demo controls ---------- */
+  .demo-controls{
+    display:flex;
+    gap:8px;
+    justify-content:center;
+    margin:14px 0 4px;
+  }
+  .demo-btn{
+    font-family:'Manrope',sans-serif;
+    font-size:11.5px;
+    font-weight:600;
+    border:1px solid var(--line);
+    background:#fff;
+    color:var(--green-deep);
+    padding:9px 14px;
+    border-radius:999px;
+    cursor:pointer;
+    transition:transform .15s ease, background .2s ease, box-shadow .2s ease;
+  }
+  .demo-btn:hover{background:var(--cream-deep);box-shadow:0 4px 10px -4px rgba(46,64,40,0.3);}
+  .demo-btn:active{transform:scale(0.95);}
+  .demo-btn.primary{background:var(--green-deep);color:var(--cream);border-color:var(--green-deep);}
+  .demo-btn.primary:hover{background:var(--green);}
+  .demo-btn:disabled{opacity:0.4;cursor:not-allowed;transform:none;box-shadow:none;}
+
+  /* ---------- Reward banner ---------- */
+  .reward-banner{
+    display:none;
+    align-items:center;
+    gap:10px;
+    background:linear-gradient(135deg, var(--green-deep), var(--green));
+    color:var(--cream);
+    border-radius:14px;
+    padding:12px 14px;
+    margin:16px 0 4px;
+    text-align:right;
+  }
+  .reward-banner.show{display:flex;}
+  .reward-banner__icon{font-size:20px;flex-shrink:0;}
+  .reward-banner__text{flex:1;}
+  .reward-banner__title{font-size:13.5px;font-weight:700;}
+  .reward-banner__sub{direction:ltr;font-family:'Manrope',sans-serif;font-size:10px;color:#D9CCB0;margin-top:2px;}
+  .reward-banner__btn{
+    font-family:'Manrope',sans-serif;
+    font-size:11px;font-weight:700;
+    background:var(--brass-soft);
+    color:var(--green-deep);
+    border:none;
+    padding:7px 12px;
+    border-radius:999px;
+    cursor:pointer;
+    flex-shrink:0;
+  }
+
+  /* ---------- Divider ---------- */
+  .card__divider{display:flex;align-items:center;gap:10px;margin:22px 0 18px;}
+  .card__divider::before,.card__divider::after{content:"";flex:1;height:1px;background:var(--line);}
+  .card__divider span{width:6px;height:6px;border-radius:50%;background:var(--brass);flex-shrink:0;}
+
+  /* ---------- QR ---------- */
+  .qr-wrap{
+    position:relative;
+    width:172px;height:172px;
+    margin:0 auto 6px;
+    display:flex;align-items:center;justify-content:center;
+    background:#fff;
+    border-radius:18px;
+    box-shadow:0 8px 20px -6px rgba(46,64,40,0.25);
+  }
+  .qr-wrap::before{content:"";position:absolute;inset:-8px;border:1px solid var(--line);border-radius:24px;z-index:-1;}
+  #qrcode img,#qrcode canvas{border-radius:6px;}
+  .qr-id{
+    direction:ltr;
+    font-family:'Manrope',sans-serif;
+    font-size:9.5px;
+    color:var(--muted);
+    letter-spacing:0.3px;
+    margin:8px 0 6px;
+    word-break:break-all;
+  }
+
+  .card__footer-ar{font-size:12.5px;font-weight:600;color:var(--ink-soft);margin:8px 0 1px;}
+  .card__footer-en{direction:ltr;font-family:'Manrope',sans-serif;font-size:10.5px;color:var(--muted);}
+
+  /* ---------- App note ---------- */
+  .app-note{
+    display:flex;align-items:flex-start;gap:9px;
+    max-width:340px;margin:26px auto 0;
+    padding:14px 16px;
+    background:rgba(255,255,255,0.04);
+    border:1px solid rgba(231,199,147,0.18);
+    border-radius:14px;
+  }
+  .app-note svg{flex-shrink:0;margin-top:2px;}
+  .app-note__text{text-align:right;}
+  .app-note-ar{font-size:12px;font-weight:600;color:#E9DCC6;}
+  .app-note-en{direction:ltr;font-family:'Manrope',sans-serif;font-size:10.5px;color:#8C7C68;margin-top:3px;}
+</style>
 </head>
 <body>
-  <div class="wrap">
-    <div class="brandbar">
-      <span class="brandbar__mark">✦</span>
-      <span class="brandbar__name">Animo</span>
-    </div>
-
-    <!-- LOYALTY CARD -->
-    <div class="card">
-      <h1 class="card__title">Loyalty Card</h1>
-      <div class="card__sub-ar">بطاقة الولاء</div>
-      
-      <div class="card__desc-en">Five stamps. Sixth cup, on us.</div>
-      <div class="card__desc-ar">خمسة أختام. الكوب السادس علينا.</div>
-
-      <div id="stampsRow" class="stamps-row">
-        <div class="stamp-slot"></div>
-        <div class="stamp-slot"></div>
-        <div class="stamp-slot"></div>
-        <div class="stamp-slot"></div>
-        <div class="stamp-slot"></div>
-      </div>
-
-      <div id="statusMsg">
-        <div class="card__hint-en">Get a stamp with every cup</div>
-        <div class="card__hint-ar">احصل على ختم مع كل كوب</div>
-      </div>
-
-      <div class="card__divider"></div>
-
-      <div class="qr-wrap">
-        <div id="qrcode"></div>
-      </div>
-
-      <div class="card__footer-text">Show this code to your barista at checkout</div>
-      <div class="card__footer-ar">اعرض هذا الكود للباريستا عند المحاسبة</div>
-    </div>
-
-    <div class="app-note">Added to your home screen, this opens straight to your card — no app store, no login.</div>
-    <div class="app-note-ar">أضفها لشاشة جهازك الرئيسية لتفتح مباشرة دون تطبيق أو تسجل دخول</div>
-  </div>
-
-  <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
-  <script>
-    // تثبيت معرف العميل وعدم تغييره أبداً عند تحديث الصفحة
-    let customerId = localStorage.getItem('animo_customer_id') || localStorage.getItem('customer_id');
-    if (!customerId) {
-      customerId = 'cust_' + Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
-      localStorage.setItem('animo_customer_id', customerId);
-    } else {
-      localStorage.setItem('animo_customer_id', customerId);
-    }
-
-    // توليد باركود فريد وثابت خاص بهذا العميل
-    new QRCode(document.getElementById("qrcode"), {
-      text: customerId,
-      width: 160,
-      height: 160
-    });
-
-    const supabaseUrl = 'https://zljlwnqphtbowtjazyqu.supabase.co';
-    const supabaseKey = 'sb_publishable_5Q-Zd5dkLvuKqwwRUF6zew_952ZJtqZ';
-    const client = supabase.createClient(supabaseUrl, supabaseKey);
-
-    async function fetchCard() {
-      const { data, error } = await client
-        .from('customer_cards')
-        .select('stamps')
-        .eq('customer_id', customerId)
-        .maybeSingle();
-
-      let stamps = data ? data.stamps : 0;
-      updateStampsUI(stamps);
-    }
-
-    function updateStampsUI(stamps) {
-      const row = document.getElementById('stampsRow');
-      if (!row) return;
-      const slots = row.getElementsByClassName('stamp-slot');
-      for (let i = 0; i < 5; i++) {
-        if (i < stamps) {
-          slots[i].classList.add('filled');
-          slots[i].textContent = '✓';
-        } else {
-          slots[i].classList.remove('filled');
-          slots[i].textContent = '';
-        }
-      }
-    }
-
-    fetchCard();
-    // تحديث تلقائي كل 3 ثوانٍ لرصد الأختام فور إضافتها من صفحة الموظف
-    setInterval(fetchCard, 3000);
-  </script>
+  <!-- Embedded from provided context[cite: 2] -->
 </body>
 </html>
+```[cite: 2]
