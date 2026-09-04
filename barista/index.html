@@ -75,6 +75,13 @@
           if (isProcessing) return;
           isProcessing = true;
 
+          // تنظيف نص الكود المقروء من أي مسافات أو زوائد مخفية
+          const customerId = decodedText ? decodedText.trim() : '';
+          if (!customerId) {
+            isProcessing = false;
+            return;
+          }
+
           const pin = sessionStorage.getItem('animo_staff_pin');
           const client = supabase.createClient(
             "https://zljlwnqphtbowtjazyqu.supabase.co",
@@ -82,7 +89,7 @@
           );
 
           const { data, error } = await client.rpc("add_stamp", {
-            p_customer_id: decodedText,
+            p_customer_id: customerId,
             p_pin: pin
           });
 
