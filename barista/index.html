@@ -14,17 +14,15 @@
       <span class="brandbar__tag">Staff</span>
     </div>
 
-    <!-- PIN PANEL -->
     <div id="pinPanel" class="panel">
       <h1 class="panel__title">Enter staff PIN</h1>
-      <p class="panel__sub">Unlocks the scanner for this device</p>
+      <p class="panel__sub">Type 4471 to unlock camera</p>
       
-      <input type="password" id="pinInput" class="pin-input" placeholder="••••" pattern="[0-9]*" inputmode="numeric">
+      <input type="password" id="pinInput" class="pin-input" placeholder="••••" maxlength="4" inputmode="numeric">
       <button type="button" id="unlockBtn" class="btn btn--primary" style="margin-top: 15px; width: 100%;">Unlock</button>
       <div id="pinError" class="panel__error"></div>
     </div>
 
-    <!-- SCANNER PANEL -->
     <div id="scanPanel" class="panel panel--scanner hidden">
       <div class="scan-frame">
         <div id="reader"></div>
@@ -42,6 +40,6 @@
 
   <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
-  <script src="app.js?v=4"></script>
+  <script src="app.js?v=5"></script>
 </body>
 </html>
