@@ -1,12 +1,13 @@
 (function () {
   "use strict";
 
+  // Supabase direct connection (No external config dependencies)
   const SUPABASE_URL = "https://zljlwnqphtbowtjazyqu.supabase.co";
-  const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpsamx3bnFwaHRib3d0amF6eXF1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDEzMDAwMDAsImV4cCI6MjA1Njg3NjAwMH0.placeholder"; // سيتم استخدام الكي المباشر أو المحمل من config
+  const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpsamx3bnFwaHRib3d0amF6eXF1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDEzMDAwMDAsImV4cCI6MjA1Njg3NjAwMH0.placeholder";
 
   let sb = null;
   function getSupabase() {
-    if (!sb) {
+    if (!sb && window.supabase) {
       const cfg = window.ANIMO_CONFIG || {};
       const url = cfg.SUPABASE_URL || SUPABASE_URL;
       const key = cfg.SUPABASE_ANON_KEY || SUPABASE_ANON_KEY;
@@ -32,6 +33,7 @@
   let lastCodeAt = 0;
 
   function showResult(kind, text) {
+    if (!resultEl) return;
     resultEl.textContent = text;
     resultEl.className = "result result--show result--" + kind;
     clearTimeout(showResult._t);
@@ -67,6 +69,8 @@
     busy = true;
     try {
       const client = getSupabase();
+      if (!client) throw new Error("Supabase client not ready");
+      
       const { data, error } = await client.rpc("add_stamp", {
         p_customer_id: text,
         p_pin: pin,
@@ -95,8 +99,8 @@
 
   async function startScanner() {
     try {
-      if (!window.Html5Qrcode) {
-        showResult("error", "Scanner library loading...");
+      if (typeof Html5Qrcode === "undefined") {
+        showResult("error", "Scanner script not loaded.");
         return;
       }
       html5QrCode = new Html5Qrcode("reader");
@@ -107,7 +111,7 @@
         () => {}
       );
     } catch (err) {
-      showResult("error", "Camera unavailable — check permissions.");
+      showResult("error", "Camera access required.");
       console.error(err);
     }
   }
@@ -123,31 +127,36 @@
   }
 
   function unlockScanner() {
-    pinPanel.classList.add("hidden");
-    scanPanel.classList.remove("hidden");
+    if (pinPanel) pinPanel.classList.add("hidden");
+    if (scanPanel) scanPanel.classList.remove("hidden");
     startScanner();
   }
 
   function lockScanner() {
     sessionStorage.removeItem(PIN_SESSION_KEY);
     stopScanner();
-    scanPanel.classList.add("hidden");
-    pinPanel.classList.remove("hidden");
-    pinInput.value = "";
-    pinInput.focus();
+    if (scanPanel) scanPanel.classList.add("hidden");
+    if (pinPanel) pinPanel.classList.remove("hidden");
+    if (pinInput) {
+      pinInput.value = "";
+      pinInput.focus();
+    }
   }
 
-  pinForm.addEventListener("submit", (e) => {
-    e.preventDefault();
-    const pin = pinInput.value.trim();
-    if (!pin) return;
-    pinError.textContent = "";
-    sessionStorage.getItem(PIN_SESSION_KEY);
-    sessionStorage.setItem(PIN_SESSION_KEY, pin);
-    unlockScanner();
-  });
+  if (pinForm) {
+    pinForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const pin = pinInput ? pinInput.value.trim() : "";
+      if (!pin) return;
+      if (pinError) pinError.textContent = "";
+      sessionStorage.setItem(PIN_SESSION_KEY, pin);
+      unlockScanner();
+    });
+  }
 
-  lockBtn.addEventListener("click", lockScanner);
+  if (lockBtn) {
+    lockBtn.addEventListener("click", lockScanner);
+  }
 
   if (sessionStorage.getItem(PIN_SESSION_KEY)) {
     unlockScanner();
