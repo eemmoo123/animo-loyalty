@@ -1,18 +1,21 @@
-// =============================================================================
-// ANIMO — barista scanner logic
-// PIN unlocks the CAMERA for this browser tab only (sessionStorage, cleared on
-// close). The PIN itself is re-verified by the server on every single stamp —
-// unlocking the UI is a convenience, not the security boundary. The real
-// boundary is add_stamp() in Postgres, which checks the PIN, checks lockouts,
-// and checks a per-customer cooldown every time it's called.
-// =============================================================================
 (function () {
   "use strict";
 
-  const { SUPABASE_URL, SUPABASE_ANON_KEY } = window.ANIMO_CONFIG;
-  const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  const SUPABASE_URL = "https://zljlwnqphtbowtjazyqu.supabase.co";
+  const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpsamx3bnFwaHRib3d0amF6eXF1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDEzMDAwMDAsImV4cCI6MjA1Njg3NjAwMH0.placeholder"; // سيتم استخدام الكي المباشر أو المحمل من config
 
-  const PIN_SESSION_KEY = "animo_staff_pin"; // sessionStorage only — gone when tab closes
+  let sb = null;
+  function getSupabase() {
+    if (!sb) {
+      const cfg = window.ANIMO_CONFIG || {};
+      const url = cfg.SUPABASE_URL || SUPABASE_URL;
+      const key = cfg.SUPABASE_ANON_KEY || SUPABASE_ANON_KEY;
+      sb = window.supabase.createClient(url, key);
+    }
+    return sb;
+  }
+
+  const PIN_SESSION_KEY = "animo_staff_pin";
   const RESCAN_COOLDOWN_MS = 2500;
 
   const pinPanel = document.getElementById("pinPanel");
@@ -44,11 +47,10 @@
   async function handleDecoded(text) {
     const now = Date.now();
     if (busy) return;
-    if (text === lastCode && now - lastCodeAt < RESCAN_COOLDOWN_MS) return; // same code, still in view
+    if (text === lastCode && now - lastCodeAt < RESCAN_COOLDOWN_MS) return;
     lastCode = text;
     lastCodeAt = now;
 
-    // A customer QR encodes a UUID. Anything else isn't one of ours.
     const uuidRe = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
     if (!uuidRe.test(text)) {
       showResult("error", "Not an Animo card.");
@@ -64,7 +66,8 @@
 
     busy = true;
     try {
-      const { data, error } = await sb.rpc("add_stamp", {
+      const client = getSupabase();
+      const { data, error } = await client.rpc("add_stamp", {
         p_customer_id: text,
         p_pin: pin,
       });
@@ -74,7 +77,6 @@
       if (!row.ok) {
         showResult("error", row.message);
         vibrate([60, 40, 60]);
-        // A wrong/locked PIN means this device's stored PIN is no good — force re-entry.
         if (/pin/i.test(row.message)) lockScanner();
       } else if (row.reward_earned) {
         showResult("reward", "🎉 Free coffee! Card reset to 0/5.");
@@ -92,13 +94,17 @@
   }
 
   async function startScanner() {
-    html5QrCode = new Html5Qrcode("reader");
     try {
+      if (!window.Html5Qrcode) {
+        showResult("error", "Scanner library loading...");
+        return;
+      }
+      html5QrCode = new Html5Qrcode("reader");
       await html5QrCode.start(
         { facingMode: "environment" },
         { fps: 10, qrbox: { width: 240, height: 240 } },
         (decodedText) => handleDecoded(decodedText),
-        () => {} // ignore per-frame "no QR found" noise
+        () => {}
       );
     } catch (err) {
       showResult("error", "Camera unavailable — check permissions.");
@@ -136,15 +142,13 @@
     const pin = pinInput.value.trim();
     if (!pin) return;
     pinError.textContent = "";
-    // We don't verify the PIN here — there's nothing to verify against on the
-    // client. We store it and let the first real scan confirm it server-side.
+    sessionStorage.getItem(PIN_SESSION_KEY);
     sessionStorage.setItem(PIN_SESSION_KEY, pin);
     unlockScanner();
   });
 
   lockBtn.addEventListener("click", lockScanner);
 
-  // If a PIN is already unlocked in this tab (e.g. page reload), skip the gate.
   if (sessionStorage.getItem(PIN_SESSION_KEY)) {
     unlockScanner();
   }
