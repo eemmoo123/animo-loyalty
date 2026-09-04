@@ -14,15 +14,17 @@
       <span class="brandbar__tag">Staff</span>
     </div>
 
+    <!-- PIN PANEL -->
     <div id="pinPanel" class="panel">
       <h1 class="panel__title">Enter staff PIN</h1>
-      <p class="panel__sub">Type 4471 to unlock camera</p>
+      <p class="panel__sub">Unlocks the scanner for this device</p>
       
       <input type="password" id="pinInput" class="pin-input" placeholder="••••" maxlength="4" inputmode="numeric">
-      <button type="button" id="unlockBtn" class="btn btn--primary" style="margin-top: 15px; width: 100%;">Unlock</button>
+      <button type="button" id="unlockBtn" class="btn btn--primary" style="margin-top: 15px; width: 100%;" onclick="checkPin()">Unlock</button>
       <div id="pinError" class="panel__error"></div>
     </div>
 
+    <!-- SCANNER PANEL -->
     <div id="scanPanel" class="panel panel--scanner hidden">
       <div class="scan-frame">
         <div id="reader"></div>
@@ -32,7 +34,7 @@
         <div class="scan-frame__corner scan-frame__corner--br"></div>
       </div>
       <p class="scan-hint">Scan customer QR code</p>
-      <button type="button" id="lockBtn" class="btn btn--ghost">Lock scanner</button>
+      <button type="button" id="lockBtn" class="btn btn--ghost" onclick="location.reload()">Lock scanner</button>
     </div>
   </div>
 
@@ -40,6 +42,45 @@
 
   <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
-  <script src="app.js?v=5"></script>
+  
+  <script>
+    function checkPin() {
+      const pin = document.getElementById('pinInput').value.trim();
+      const err = document.getElementById('pinError');
+      
+      if (pin === '4471') {
+        sessionStorage.setItem('animo_staff_pin', pin);
+        document.getElementById('pinPanel').classList.add('hidden');
+        document.getElementById('scanPanel').classList.remove('hidden');
+        startCamera();
+      } else {
+        err.textContent = 'Incorrect PIN';
+      }
+    }
+
+    function startCamera() {
+      if (typeof Html5Qrcode !== 'undefined') {
+        const html5QrCode = new Html5Qrcode("reader");
+        html5QrCode.start(
+          { facingMode: "environment" },
+          { fps: 10, qrbox: { width: 240, height: 240 } },
+          (decodedText) => { alert("Scanned: " + decodedText); },
+          () => {}
+        ).catch(err => {
+          alert("Camera Error: " + err);
+        });
+      } else {
+        alert("Scanner library not loaded yet, please refresh.");
+      }
+    }
+
+    // تشغيل تلقائي عند إدخال 4 أرقام
+    document.getElementById('pinInput').addEventListener('input', function() {
+      if (this.value.length === 4) {
+        checkPin();
+      }
+    });
+  </script>
+  <script src="app.js?v=6"></script>
 </body>
 </html>
