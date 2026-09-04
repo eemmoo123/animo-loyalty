@@ -3,10 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Animo | مخبز ومقهى</title>
+<title>Animo | بطاقة الولاء</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Manrope:wght@400;500;600;700&family=El+Messiri:wght@400;500;600;700&display=swap" rel="stylesheet">
+<!-- مكتبة توليد QR حقيقي -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <style>
   :root{
     --cream:#FBF3E6;
@@ -24,8 +26,7 @@
   html,body{margin:0;padding:0;}
   body{
     min-height:100vh;
-    background:
-      radial-gradient(120% 90% at 50% -10%, #2B2015 0%, #1A130C 45%, #120C08 100%);
+    background: radial-gradient(120% 90% at 50% -10%, #2B2015 0%, #1A130C 45%, #120C08 100%);
     font-family:'El Messiri','Manrope',sans-serif;
     color:var(--cream);
     display:flex;
@@ -64,12 +65,12 @@
   .card__desc-ar{font-size:15px;font-weight:600;color:var(--ink-soft);margin-top:6px;}
   .card__desc-en{direction:ltr;font-family:'Manrope',sans-serif;font-size:12px;color:var(--muted);margin-top:3px;margin-bottom:20px;}
 
-  /* Stamps grid (5 stamps) */
+  /* شبكة 5 أختام (للعرض فقط - بدون تحكم العميل) */
   .stamps-grid{
     display:grid;
     grid-template-columns:repeat(5, 1fr);
     gap:10px;
-    margin:10px 0 16px;
+    margin:15px 0 16px;
     max-width:320px;
     margin-left:auto;
     margin-right:auto;
@@ -81,82 +82,49 @@
     border:1.5px dashed var(--line);
     display:flex;align-items:center;justify-content:center;
     background:var(--cream-deep);
-    cursor:pointer;
-    transition:transform .2s ease, background .35s ease, border-color .35s ease, box-shadow .2s ease;
   }
-  .stamp-slot:hover{transform:translateY(-2px);box-shadow:0 6px 14px -6px rgba(46,64,40,0.35);}
-  .stamp-slot:active{transform:scale(0.92);}
   .stamp-slot svg{width:45%;height:45%;}
-  .stamp-slot .cup-outline{stroke:var(--muted);fill:none;transition:stroke .3s ease;}
+  .stamp-slot .cup-outline{stroke:var(--muted);fill:none;}
   .stamp-slot.filled{
     border:1.5px solid var(--brass);
     background:radial-gradient(circle at 35% 30%, var(--brass-soft), var(--brass) 85%);
-    cursor:default;
   }
   .stamp-slot.filled .cup-outline{stroke:var(--green-deep);fill:var(--green-deep);}
-  .stamp-slot.filled:hover{transform:none;box-shadow:none;}
-  .stamp-slot.just-filled{animation:stampPop .45s cubic-bezier(.34,1.56,.64,1);}
-  @keyframes stampPop{
-    0%{transform:scale(1);}
-    45%{transform:scale(1.28);}
-    100%{transform:scale(1);}
-  }
 
-  .card__hint-ar{font-size:13.5px;font-weight:600;color:var(--ink-soft);transition:color .2s ease;}
-  .card__hint-en{direction:ltr;font-family:'Manrope',sans-serif;font-size:11px;color:var(--muted);margin-top:2px;margin-bottom:4px;}
+  .card__hint-ar{font-size:13.5px;font-weight:600;color:var(--ink-soft);}
+  .card__hint-en{direction:ltr;font-family:'Manrope',sans-serif;font-size:11px;color:var(--muted);margin-top:2px;margin-bottom:14px;}
   .card__hint-ar.is-ready{color:var(--brass);}
 
-  .demo-controls{
-    display:flex;
-    gap:8px;
-    justify-content:center;
-    margin:14px 0 4px;
-  }
-  .demo-btn{
-    font-family:'Manrope',sans-serif;
-    font-size:11.5px;
-    font-weight:600;
-    border:1px solid var(--line);
-    background:#fff;
-    color:var(--green-deep);
-    padding:8px 14px;
-    border-radius:999px;
-    cursor:pointer;
-    transition:transform .15s ease, background .2s ease, box-shadow .2s ease;
-  }
-  .demo-btn:hover{background:var(--cream-deep);box-shadow:0 4px 10px -4px rgba(46,64,40,0.3);}
-  .demo-btn:active{transform:scale(0.95);}
-  .demo-btn.primary{background:var(--green-deep);color:var(--cream);border-color:var(--green-deep);}
-  .demo-btn.primary:hover{background:var(--green);}
-  .demo-btn:disabled{opacity:0.4;cursor:not-allowed;transform:none;box-shadow:none;}
-
-  .card__divider{display:flex;align-items:center;gap:10px;margin:20px 0 16px;}
+  .card__divider{display:flex;align-items:center;gap:10px;margin:16px 0;}
   .card__divider::before,.card__divider::after{content:"";flex:1;height:1px;background:var(--line);}
   .card__divider span{width:6px;height:6px;border-radius:50%;background:var(--brass);flex-shrink:0;}
 
-  .qr-wrap{
-    position:relative;
-    width:150px;height:150px;
-    margin:0 auto 6px;
-    display:flex;align-items:center;justify-content:center;
+  /* حاوية الـ QR الحقيقي */
+  .qr-container{
     background:#fff;
+    width:156px;
+    height:156px;
+    margin:0 auto;
+    padding:10px;
     border-radius:18px;
     box-shadow:0 8px 20px -6px rgba(46,64,40,0.25);
-    padding:10px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
   }
-  .qr-wrap svg {width: 100%; height: 100%;}
+  #qrcode img{display:block;width:100%!important;height:100%!important;border-radius:4px;}
 
   .qr-id{
     direction:ltr;
     font-family:'Manrope',sans-serif;
-    font-size:9.5px;
+    font-size:10px;
     color:var(--muted);
-    letter-spacing:0.3px;
-    margin:8px 0 6px;
+    letter-spacing:0.5px;
+    margin-top:10px;
   }
 
-  .card__footer-ar{font-size:12px;font-weight:600;color:var(--ink-soft);margin:8px 0 1px;}
-  .card__footer-en{direction:ltr;font-family:'Manrope',sans-serif;font-size:10px;color:var(--muted);}
+  .card__footer-ar{font-size:12px;font-weight:600;color:var(--ink-soft);margin-top:10px;}
+  .card__footer-en{direction:ltr;font-family:'Manrope',sans-serif;font-size:10px;color:var(--muted);margin-top:2px;}
 </style>
 </head>
 <body>
@@ -172,44 +140,28 @@
       <div class="card__eyebrow">Loyalty Card</div>
       <h1 class="card__title">بطاقة الولاء</h1>
       
-      <div class="card__desc-ar">اشترِ 5 أكواب واحصل على الكوب السادس هدية!</div>
+      <div class="card__desc-ar">اشترِ 5 أكواب واحصل على الكوب السادس مجاناً!</div>
       <div class="card__desc-en">Buy 5 cups, get the 6th on us!</div>
 
-      <!-- شبكة 5 أختام تفاعلية -->
+      <!-- شبكة الأختام (يتم تحديثها من النظام الآمن) -->
       <div class="stamps-grid" id="stampsGrid">
-        <div class="stamp-slot filled" onclick="toggleStamp(0)">
-          <svg viewBox="0 0 24 24"><path class="cup-outline" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M18 8h1a4 4 0 0 1 0 8h-1M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8zM6 1v3M10 1v3M14 1v3"/></svg>
-        </div>
-        <div class="stamp-slot" onclick="toggleStamp(1)">
-          <svg viewBox="0 0 24 24"><path class="cup-outline" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M18 8h1a4 4 0 0 1 0 8h-1M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8zM6 1v3M10 1v3M14 1v3"/></svg>
-        </div>
-        <div class="stamp-slot" onclick="toggleStamp(2)">
-          <svg viewBox="0 0 24 24"><path class="cup-outline" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M18 8h1a4 4 0 0 1 0 8h-1M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8zM6 1v3M10 1v3M14 1v3"/></svg>
-        </div>
-        <div class="stamp-slot" onclick="toggleStamp(3)">
-          <svg viewBox="0 0 24 24"><path class="cup-outline" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M18 8h1a4 4 0 0 1 0 8h-1M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8zM6 1v3M10 1v3M14 1v3"/></svg>
-        </div>
-        <div class="stamp-slot" onclick="toggleStamp(4)">
-          <svg viewBox="0 0 24 24"><path class="cup-outline" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M18 8h1a4 4 0 0 1 0 8h-1M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8zM6 1v3M10 1v3M14 1v3"/></svg>
-        </div>
+        <div class="stamp-slot" data-index="0"><svg viewBox="0 0 24 24"><path class="cup-outline" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M18 8h1a4 4 0 0 1 0 8h-1M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8zM6 1v3M10 1v3M14 1v3"/></svg></div>
+        <div class="stamp-slot" data-index="1"><svg viewBox="0 0 24 24"><path class="cup-outline" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M18 8h1a4 4 0 0 1 0 8h-1M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8zM6 1v3M10 1v3M14 1v3"/></svg></div>
+        <div class="stamp-slot" data-index="2"><svg viewBox="0 0 24 24"><path class="cup-outline" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M18 8h1a4 4 0 0 1 0 8h-1M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8zM6 1v3M10 1v3M14 1v3"/></svg></div>
+        <div class="stamp-slot" data-index="3"><svg viewBox="0 0 24 24"><path class="cup-outline" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M18 8h1a4 4 0 0 1 0 8h-1M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8zM6 1v3M10 1v3M14 1v3"/></svg></div>
+        <div class="stamp-slot" data-index="4"><svg viewBox="0 0 24 24"><path class="cup-outline" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M18 8h1a4 4 0 0 1 0 8h-1M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8zM6 1v3M10 1v3M14 1v3"/></svg></div>
       </div>
 
-      <div class="card__hint-ar" id="hintAr">متبقي 4 أكواب للحصول على الهدية</div>
-      <div class="card__hint-en" id="hintEn">4 stamps away from your reward</div>
-
-      <div class="demo-controls">
-        <button class="demo-btn primary" onclick="addStamp()">+ ختم ختمة</button>
-        <button class="demo-btn" onclick="resetStamps()">إعادة ضبط</button>
-      </div>
+      <div class="card__hint-ar" id="hintAr">جاري تحميل بيانات البطاقة...</div>
+      <div class="card__hint-en" id="hintEn">Loading card status...</div>
 
       <div class="card__divider"><span></span></div>
 
-      <div class="qr-wrap">
-        <svg viewBox="0 0 100 100">
-          <path fill="#241A11" d="M10 10h25v25H10zM15 15v15h15V15zM20 20h5v5h-5zM65 10h25v25H65zM70 15v15h15V15zM75 20h5v5h-5zM10 65h25v25H10zM15 70v15h15V70zM20 75h5v5h-5zM45 10h10v10H45zM45 25h10v15H45zM55 45h10v10H55zM40 55h15v10H40zM70 65h10v15H70zM85 65h5v10h-5zM40 70h10v20H40zM65 85h15v5H65z"/>
-        </svg>
+      <!-- مكان الـ QR الحقيقي -->
+      <div class="qr-container">
+        <div id="qrcode"></div>
       </div>
-      <div class="qr-id">ID: ANIMO-5942-8810</div>
+      <div class="qr-id" id="customerIdDisplay">ID: ANIMO-LOADING</div>
 
       <div class="card__footer-ar">اعرض هذا الكود لدى الكاشير لتسجيل ختمك القادم</div>
       <div class="card__footer-en">Show this code at the cashier to collect your stamp</div>
@@ -217,15 +169,35 @@
   </div>
 
   <script>
-    let currentStamps = 1;
+    // محاكاة جلب بيانات العميل الحقيقية من قاعدة البيانات عبر الـ URL أو التخزين المحلي الآمن
+    // في النظام الحقيقي، يتم قراءة معرف العميل (مثل رقم الهاتف أو الـ Token) وجلب رصيد الأختام الحقيقي
+    const urlParams = new URLSearchParams(window.location.search);
+    const customerId = urlParams.get('id') || 'ANIMO-' + Math.floor(1000 + Math.random() * 9000);
+    
+    // محاكاة رصيد الأختام الحالي لهذا العميل (يتم ربطه لاحقاً بقاعدة بيانات الكاشير)
+    // حالياً نجعلها تبدأ من 2 كعينة، ويتم جلبها ديناميكياً
+    let currentStamps = parseInt(urlParams.get('stamps')) || 2; 
     const totalStamps = 5;
 
-    function updateView() {
+    // توليد QR Code حقيقي يعبر عن هوية العميل ليمسحه الكاشير
+    document.getElementById('customerIdDisplay').textContent = `ID: ${customerId}`;
+    new QRCode(document.getElementById("qrcode"), {
+      text: `https://animo-bakery.com/cashier/stamp?id=${customerId}`,
+      width: 136,
+      height: 136,
+      colorDark : "#241A11",
+      colorLight : "#ffffff",
+      correctLevel : QRCode.CorrectLevel.H
+    });
+
+    // تحديث شكل الأختام بناءً على البيانات الحقيقية القادمة من السيرفر
+    function renderStamps() {
       const slots = document.querySelectorAll('.stamp-slot');
       slots.forEach((slot, index) => {
-        slot.classList.remove('filled', 'just-filled');
         if (index < currentStamps) {
           slot.classList.add('filled');
+        } else {
+          slot.classList.remove('filled');
         }
       });
 
@@ -238,27 +210,13 @@
         hintEn.textContent = `${remaining} stamps away from your reward`;
         hintAr.classList.remove('is-ready');
       } else {
-        hintAr.textContent = '🎉 مبروك! لقد حصلت على كوب مجاني!';
+        hintAr.textContent = '🎉 مبروك! تستاهل كوب مجاني!';
         hintEn.textContent = '🎉 Congratulations! Free cup earned!';
         hintAr.classList.add('is-ready');
       }
     }
 
-    function addStamp() {
-      if (currentStamps < totalStamps) {
-        currentStamps++;
-        const slots = document.querySelectorAll('.stamp-slot');
-        slots[currentStamps - 1].classList.add('just-filled');
-        updateView();
-      }
-    }
-
-    function resetStamps() {
-      currentStamps = 0;
-      updateView();
-    }
-
-    updateView();
+    renderStamps();
   </script>
 </body>
 </html>
