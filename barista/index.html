@@ -44,7 +44,7 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
   
   <script>
-    let html5QrCode = null;
+    let isProcessing = false;
 
     function checkPin() {
       const pin = document.getElementById('pinInput').value.trim();
@@ -60,63 +60,57 @@
       }
     }
 
-    async function startCamera() {
+    function startCamera() {
       if (typeof Html5Qrcode === 'undefined') {
         alert("Scanner library not loaded yet, please refresh.");
         return;
       }
 
-      if (!html5QrCode) {
-        html5QrCode = new Html5Qrcode("reader");
-      }
+      const html5QrCode = new Html5Qrcode("reader");
+      html5QrCode.start(
+        { facingMode: "environment" },
+        { fps: 10, qrbox: { width: 240, height: 240 } },
+        async (decodedText) => {
+          // منع المعالجة المتكررة أثناء قراءة نفس الكود
+          if (isProcessing) return;
+          isProcessing = true;
 
-      try {
-        await html5QrCode.start(
-          { facingMode: "environment" },
-          { fps: 10, qrbox: { width: 240, height: 240 } },
-          async (decodedText) => {
-            try {
-              await html5QrCode.stop();
-            } catch (e) {
-              console.warn("Scanner stop warning:", e);
-            }
+          const pin = sessionStorage.getItem('animo_staff_pin');
+          const client = supabase.createClient(
+            "https://zljlwnqphtbowtjazyqu.supabase.co",
+            "sb_publishable_5Q-Zd5dkLvuKqwwRUF6zew_952ZJtqZ"
+          );
 
-            const pin = sessionStorage.getItem('animo_staff_pin');
-            const client = supabase.createClient(
-              "https://zljlwnqphtbowtjazyqu.supabase.co",
-              "sb_publishable_5Q-Zd5dkLvuKqwwRUF6zew_952ZJtqZ"
-            );
+          const { data, error } = await client.rpc("add_stamp", {
+            p_customer_id: decodedText,
+            p_pin: pin
+          });
 
-            const { data, error } = await client.rpc("add_stamp", {
-              p_customer_id: decodedText,
-              p_pin: pin
-            });
-
-            const resEl = document.getElementById('result');
-            if (error || !data) {
-              resEl.textContent = "Error: " + (error ? error.message : "Failed");
-              resEl.className = "result result--show result--error";
+          const resEl = document.getElementById('result');
+          if (error || !data) {
+            resEl.textContent = "Error: " + (error ? error.message : "Failed");
+            resEl.className = "result result--show result--error";
+          } else {
+            const row = Array.isArray(data) ? data[0] : data;
+            if (row.reward_earned) {
+              resEl.textContent = "🎉 Free coffee! Card reset to 0/5.";
+              resEl.className = "result result--show result--reward";
             } else {
-              const row = Array.isArray(data) ? data[0] : data;
-              if (row.reward_earned) {
-                resEl.textContent = "🎉 Free coffee! Card reset to 0/5.";
-                resEl.className = "result result--show result--reward";
-              } else {
-                resEl.textContent = `Stamped — ${row.stamps}/5`;
-                resEl.className = "result result--show result--ok";
-              }
+              resEl.textContent = `Stamped — ${row.stamps}/5`;
+              resEl.className = "result result--show result--ok";
             }
+          }
 
-            setTimeout(() => {
-              resEl.classList.remove('result--show');
-              startCamera();
-            }, 3000);
-          },
-          () => {}
-        );
-      } catch (err) {
+          // إعادة السماح بالمسح بعد ثانيتين دون إغلاق الكاميرا
+          setTimeout(() => {
+            resEl.classList.remove('result--show');
+            isProcessing = false;
+          }, 2000);
+        },
+        () => {}
+      ).catch(err => {
         console.error("Camera start error:", err);
-      }
+      });
     }
 
     document.getElementById('pinInput').addEventListener('input', function() {
