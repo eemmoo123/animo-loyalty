@@ -80,15 +80,12 @@
             return;
           }
 
-          // معالجة ذكية: إذا كان الكود المقروء عبارة عن رابط يحتوي على ?id= استخرج الـ ID مباشرة، وإلا فخذ النص كما هو
           let customerId = rawText;
           try {
             if (rawText.includes('http://') || rawText.includes('https://')) {
               const urlObj = new URL(rawText);
               const idParam = urlObj.searchParams.get('id');
-              if (idParam) {
-                customerId = idParam;
-              }
+              if (idParam) customerId = idParam;
             }
           } catch (e) {
             console.error("URL parse error:", e);
@@ -106,16 +103,24 @@
           });
 
           const resEl = document.getElementById('result');
-          if (error || !data) {
-            resEl.textContent = "Error: " + (error ? error.message : "Failed");
+          
+          if (error) {
+            resEl.textContent = "Error: " + error.message;
             resEl.className = "result result--show result--error";
+          } else if (data === null || (Array.isArray(data) && data.length === 0)) {
+            // معالجة حالة الـ null أو عدم إرجاع بيانات من القاعدة
+            resEl.textContent = "✓ Stamped successfully (New or Updated)";
+            resEl.className = "result result--show result--ok";
           } else {
             const row = Array.isArray(data) ? data[0] : data;
-            if (row.reward_earned) {
+            if (row && row.reward_earned) {
               resEl.textContent = "🎉 Free coffee! Card reset to 0/5.";
               resEl.className = "result result--show result--reward";
-            } else {
+            } else if (row && row.stamps !== undefined) {
               resEl.textContent = `Stamped — ${row.stamps}/5`;
+              resEl.className = "result result--show result--ok";
+            } else {
+              resEl.textContent = "✓ Stamped successfully";
               resEl.className = "result result--show result--ok";
             }
           }
