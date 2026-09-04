@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1" />
+<title>Animo — Loyalty Card</title>
+<meta name="description" content="Your Animo loyalty card. Buy 5, get the 6th free." />
+
+<!-- PWA / "Add to Home Screen" -->
+<link rel="manifest" href="manifest.json" />
+<meta name="theme-color" content="#1B1410" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="Animo" />
+<link rel="apple-touch-icon" href="icons/icon-192.png" />
+<link rel="icon" href="icons/icon-192.png" />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<main class="wrap">
+
+  <header class="brandbar">
+    <span class="brandbar__mark" aria-hidden="true">✦</span>
+    <span class="brandbar__name">Animo</span>
+  </header>
+
+  <section class="card" id="card" aria-live="polite">
+
+    <div class="card__top">
+      <h1 class="card__title">Loyalty Card</h1>
+      <p class="card__sub">Five stamps. Sixth cup, on us.</p>
+    </div>
+
+    <div class="stamps" id="stamps" role="img" aria-label="Stamp progress">
+      <!-- 5 stamp slots injected by app.js -->
+    </div>
+
+    <p class="progress-label" id="progressLabel">Loading your card…</p>
+
+    <div class="perforation" aria-hidden="true"></div>
+
+    <div class="card__bottom">
+      <div class="qr" id="qrHolder">
+        <div id="qrcode"></div>
+      </div>
+      <p class="qr__hint">Show this code to your barista at checkout</p>
+    </div>
+
+  </section>
+
+  <div class="toast" id="toast" role="status" aria-live="assertive"></div>
+
+  <p class="footnote">Added to your home screen, this opens straight to your card — no app store, no login.</p>
+
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script src="config.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

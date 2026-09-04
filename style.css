@@ -1,0 +1,212 @@
+:root {
+  --ink:        #1B1410;
+  --ink-soft:   #2B211B;
+  --parchment:  #F3ECDD;
+  --parchment-2:#EAE0CB;
+  --amber:      #B8862E;
+  --amber-deep: #8F6620;
+  --clay:       #7A4B32;
+  --line:       rgba(27, 20, 16, 0.14);
+  --success:    #5C7A52;
+
+  --serif: "Fraunces", Georgia, serif;
+  --sans:  "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--ink);
+  color: var(--ink);
+  font-family: var(--sans);
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  min-height: 100dvh;
+  display: flex;
+  justify-content: center;
+  padding: env(safe-area-inset-top) 0 env(safe-area-inset-bottom);
+  background:
+    radial-gradient(120% 90% at 50% -10%, #2A2019 0%, #1B1410 55%, #14100C 100%);
+}
+
+.wrap {
+  width: 100%;
+  max-width: 420px;
+  padding: 28px 20px 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.brandbar {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin-bottom: 22px;
+  color: var(--parchment);
+}
+.brandbar__mark {
+  color: var(--amber);
+  font-size: 15px;
+  transform: translateY(-1px);
+}
+.brandbar__name {
+  font-family: var(--serif);
+  font-optical-sizing: auto;
+  font-weight: 500;
+  font-size: 22px;
+  letter-spacing: 0.01em;
+}
+
+/* ---------- The card itself ---------- */
+.card {
+  width: 100%;
+  background: var(--parchment);
+  border-radius: 22px;
+  box-shadow:
+    0 1px 0 rgba(255,255,255,0.5) inset,
+    0 24px 48px -18px rgba(0,0,0,0.55);
+  overflow: hidden;
+  position: relative;
+}
+
+.card__top {
+  padding: 30px 26px 6px;
+  text-align: center;
+}
+.card__title {
+  margin: 0;
+  font-family: var(--serif);
+  font-optical-sizing: auto;
+  font-weight: 600;
+  font-size: 26px;
+  color: var(--ink);
+}
+.card__sub {
+  margin: 6px 0 0;
+  font-size: 14px;
+  color: var(--clay);
+}
+
+.stamps {
+  display: flex;
+  justify-content: center;
+  gap: 14px;
+  padding: 28px 20px 8px;
+  flex-wrap: wrap;
+}
+
+.stamp {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  border: 1.5px dashed var(--clay);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--serif);
+  font-size: 20px;
+  color: transparent;
+  transition: transform 0.35s cubic-bezier(.34,1.56,.64,1), background 0.3s, border-color 0.3s;
+}
+.stamp--filled {
+  border-style: solid;
+  border-color: var(--amber-deep);
+  background: radial-gradient(circle at 32% 28%, #D6A94C, var(--amber) 60%, var(--amber-deep) 100%);
+  color: var(--parchment);
+  box-shadow: 0 4px 10px -4px rgba(143, 102, 32, 0.6);
+}
+.stamp--pop { animation: pop 0.5s cubic-bezier(.34,1.56,.64,1); }
+@keyframes pop {
+  0%   { transform: scale(0.4) rotate(-8deg); }
+  60%  { transform: scale(1.12) rotate(3deg); }
+  100% { transform: scale(1) rotate(0); }
+}
+
+.progress-label {
+  text-align: center;
+  margin: 10px 0 4px;
+  font-size: 14px;
+  color: var(--ink-soft);
+  min-height: 20px;
+}
+.progress-label--reward {
+  color: var(--success);
+  font-weight: 600;
+}
+
+.perforation {
+  position: relative;
+  height: 0;
+  margin: 22px 0 0;
+  border-top: 1.5px dashed var(--line);
+}
+.perforation::before,
+.perforation::after {
+  content: "";
+  position: absolute;
+  top: -9px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--ink);
+}
+.perforation::before { left: -9px; }
+.perforation::after  { right: -9px; }
+
+.card__bottom {
+  padding: 26px 20px 30px;
+  text-align: center;
+}
+
+.qr {
+  display: inline-flex;
+  padding: 14px;
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+}
+#qrcode { line-height: 0; }
+#qrcode img { display: block; border-radius: 4px; }
+
+.qr__hint {
+  margin: 14px 0 0;
+  font-size: 13px;
+  color: var(--clay);
+}
+
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: 28px;
+  transform: translateX(-50%) translateY(120%);
+  background: var(--ink);
+  color: var(--parchment);
+  border: 1px solid rgba(255,255,255,0.1);
+  padding: 12px 20px;
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 500;
+  box-shadow: 0 12px 30px rgba(0,0,0,0.4);
+  transition: transform 0.35s cubic-bezier(.34,1.56,.64,1);
+  z-index: 20;
+  white-space: nowrap;
+}
+.toast--show { transform: translateX(-50%) translateY(0); }
+
+.footnote {
+  max-width: 320px;
+  text-align: center;
+  margin-top: 24px;
+  font-size: 12px;
+  line-height: 1.5;
+  color: rgba(243,236,221,0.5);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stamp, .toast { transition: none; animation: none; }
+}
