@@ -7,6 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Manrope:wght@400;500;600;700&family=El+Messiri:wght@400;500;600;700&display=swap" rel="stylesheet">
+<!-- مكتبة توليد الـ QR -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <style>
   :root{
@@ -34,10 +35,18 @@
     padding:32px 18px 44px;
   }
   .wrap{width:100%;max-width:400px;}
-  .brandbar{display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:26px;}
+
+  .brandbar{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:10px;
+    margin-bottom:26px;
+  }
   .brandbar__text{display:flex;flex-direction:column;line-height:1;font-family:'Fraunces',serif;}
   .brandbar__name{font-size:19px;font-weight:600;letter-spacing:0.3px;color:var(--brass-soft);direction:ltr;text-align:center;}
   .brandbar__tag{font-family:'Manrope',sans-serif;font-size:9px;font-weight:600;letter-spacing:2px;color:#9C8B72;margin-top:3px;direction:ltr;text-align:center;}
+
   .card{
     position:relative;
     background:var(--cream);
@@ -49,10 +58,14 @@
     border:1px solid rgba(255,255,255,0.5);
     overflow:hidden;
   }
+
   .card__eyebrow{font-family:'Fraunces',serif;font-style:italic;font-size:13px;color:var(--brass);margin:0 0 4px;}
   .card__title{font-family:'El Messiri',sans-serif;font-size:25px;font-weight:700;color:var(--green-deep);margin:0;}
+  
   .card__desc-ar{font-size:15px;font-weight:600;color:var(--ink-soft);margin-top:6px;}
   .card__desc-en{direction:ltr;font-family:'Manrope',sans-serif;font-size:12px;color:var(--muted);margin-top:3px;margin-bottom:20px;}
+
+  /* شبكة الأختام (ب نفس التصميم النسقي تماماً بدون أزرار غش) */
   .stamps-grid{
     display:grid;
     grid-template-columns:repeat(5, 1fr);
@@ -77,12 +90,15 @@
     background:radial-gradient(circle at 35% 30%, var(--brass-soft), var(--brass) 85%);
   }
   .stamp-slot.filled .cup-outline{stroke:var(--green-deep);fill:var(--green-deep);}
+
   .card__hint-ar{font-size:13.5px;font-weight:600;color:var(--ink-soft);}
   .card__hint-en{direction:ltr;font-family:'Manrope',sans-serif;font-size:11px;color:var(--muted);margin-top:2px;margin-bottom:14px;}
   .card__hint-ar.is-ready{color:var(--brass);}
+
   .card__divider{display:flex;align-items:center;gap:10px;margin:16px 0;}
   .card__divider::before,.card__divider::after{content:"";flex:1;height:1px;background:var(--line);}
   .card__divider span{width:6px;height:6px;border-radius:50%;background:var(--brass);flex-shrink:0;}
+
   .qr-container{
     background:#fff;
     width:156px;
@@ -96,15 +112,16 @@
     justify-content:center;
   }
   #qrcode img{display:block;width:100%!important;height:100%!important;border-radius:4px;}
+
   .qr-id{
     direction:ltr;
     font-family:'Manrope',sans-serif;
-    font-size:9px;
+    font-size:9.5px;
     color:var(--muted);
-    letter-spacing:0.2px;
+    letter-spacing:0.3px;
     margin-top:10px;
-    word-break:break-all;
   }
+
   .card__footer-ar{font-size:12px;font-weight:600;color:var(--ink-soft);margin-top:10px;}
   .card__footer-en{direction:ltr;font-family:'Manrope',sans-serif;font-size:10px;color:var(--muted);margin-top:2px;}
 </style>
@@ -149,7 +166,7 @@
   </div>
 
   <script>
-    // توليد أو جلب معرف بصيغة UUID v4 حقيقي ليناسب قاعدة البيانات لديك
+    // دالة توليد UUID نظيف ومتوافق تماماً مع حقول الـ Database لديك
     function generateUUID() {
       return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
         var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
@@ -157,26 +174,22 @@
       });
     }
 
-    const urlParams = new URLSearchParams(window.location.search);
-    let customerId = urlParams.get('id');
-    
-    // إذا لم يكن هناك ID في الرابط، يتم إنشاء وتخزين UUID للعميل في متصفحه ليبقى ثابتاً له
+    // جلب أو إنشاء معرف UUID خاص بالعميل ومحفوظ في جهازه ليبقى ثابتاً
+    let customerId = localStorage.getItem('animo_customer_uuid');
     if (!customerId) {
-      customerId = localStorage.getItem('animo_customer_uuid');
-      if (!customerId) {
-        customerId = generateUUID();
-        localStorage.setItem('animo_customer_uuid', customerId);
-      }
+      customerId = generateUUID();
+      localStorage.setItem('animo_customer_uuid', customerId);
     }
 
+    const urlParams = new URLSearchParams(window.location.search);
     let currentStamps = parseInt(urlParams.get('stamps')) || 2; 
     const totalStamps = 5;
 
     document.getElementById('customerIdDisplay').textContent = `ID: ${customerId}`;
     
-    // توليد الـ QR بالرابط الصحيح وبمعرف الـ UUID
+    // وضع الـ UUID الصافي داخل الـ QR لكي يقبله نظام الكاشير دون خطأ الـ syntax
     new QRCode(document.getElementById("qrcode"), {
-      text: `https://animo-bakery.com/cashier/stamp?id=${customerId}`,
+      text: customerId,
       width: 136,
       height: 136,
       colorDark : "#241A11",
