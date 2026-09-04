@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Animo Loyalty</title>
+  <title>Animo | مخبز ومقهى</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -16,7 +16,10 @@
     <!-- LOYALTY CARD -->
     <div class="card">
       <h1 class="card__title">Loyalty Card</h1>
-      <p class="card__sub">Five stamps. Sixth cup, on us.</p>
+      <p class="card__sub-ar">بطاقة الولاء</p>
+      
+      <p class="card__desc-en">Five stamps. Sixth cup, on us.</p>
+      <p class="card__desc-ar">خمسة أختام. الكوب السادس علينا.</p>
 
       <div id="stampsRow" class="stamps-row">
         <div class="stamp-slot"></div>
@@ -26,7 +29,10 @@
         <div class="stamp-slot"></div>
       </div>
 
-      <div id="statusMsg" class="card__hint">Get a stamp with every cup</div>
+      <div id="statusMsg" class="card__hint">
+        <span>Get a stamp with every cup</span>
+        <span class="hint-ar">احصل على ختم مع كل كوب</span>
+      </div>
 
       <div class="card__divider"></div>
 
@@ -35,13 +41,15 @@
       </div>
 
       <p class="card__footer-text">Show this code to your barista at checkout</p>
+      <p class="card__footer-ar">اعرض هذا الكود للباريستا عند المحاسبة</p>
     </div>
 
     <p class="app-note">Added to your home screen, this opens straight to your card — no app store, no login.</p>
+    <p class="app-note-ar">أضفها لشاشة جهازك الرئيسية لتفتح مباشرة دون تطبيق أو تسجل دخول</p>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
-  <script src="app.js?v=2"></script>
+  <script src="app.js?v=3"></script>
 </body>
 </html>
