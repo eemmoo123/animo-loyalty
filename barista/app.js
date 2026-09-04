@@ -6,8 +6,12 @@
 
   let sb = null;
   function getSupabase() {
-    if (!sb && window.supabase) {
-      sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    if (!sb) {
+      if (typeof supabase !== "undefined" && supabase.createClient) {
+        sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+      } else if (window.supabase && window.supabase.createClient) {
+        sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+      }
     }
     return sb;
   }
@@ -66,7 +70,7 @@
     try {
       const client = getSupabase();
       if (!client) throw new Error("Supabase client not ready");
-      
+
       const { data, error } = await client.rpc("add_stamp", {
         p_customer_id: text,
         p_pin: pin,
