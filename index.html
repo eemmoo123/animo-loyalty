@@ -179,14 +179,12 @@
   <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
   <script>
-    let customerId = localStorage.getItem('animo_customer_id');
+    // استرجاع المعرف القديم أو توليد معرف موحد وثابت لا يتغير
+    let customerId = localStorage.getItem('animo_customer_id') || localStorage.getItem('customer_id');
     if (!customerId) {
-      customerId = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-        let r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
-        return v.toString(16);
-      });
-      localStorage.setItem('animo_customer_id', customerId);
+      customerId = 'cust_' + Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
     }
+    localStorage.setItem('animo_customer_id', customerId);
 
     new QRCode(document.getElementById("qrcode"), {
       text: customerId,
@@ -203,7 +201,7 @@
         .from('customer_cards')
         .select('stamps')
         .eq('customer_id', customerId)
-        .single();
+        .maybeSingle();
 
       let stamps = data ? data.stamps : 0;
       updateStampsUI(stamps);
