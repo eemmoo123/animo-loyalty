@@ -179,13 +179,16 @@
   <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
   <script>
-    // استرجاع المعرف القديم أو توليد معرف موحد وثابت لا يتغير
+    // تثبيت معرف العميل وعدم تغييره أبداً عند تحديث الصفحة
     let customerId = localStorage.getItem('animo_customer_id') || localStorage.getItem('customer_id');
     if (!customerId) {
       customerId = 'cust_' + Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+      localStorage.setItem('animo_customer_id', customerId);
+    } else {
+      localStorage.setItem('animo_customer_id', customerId);
     }
-    localStorage.setItem('animo_customer_id', customerId);
 
+    // توليد باركود فريد وثابت خاص بهذا العميل
     new QRCode(document.getElementById("qrcode"), {
       text: customerId,
       width: 160,
@@ -209,6 +212,7 @@
 
     function updateStampsUI(stamps) {
       const row = document.getElementById('stampsRow');
+      if (!row) return;
       const slots = row.getElementsByClassName('stamp-slot');
       for (let i = 0; i < 5; i++) {
         if (i < stamps) {
@@ -222,6 +226,7 @@
     }
 
     fetchCard();
+    // تحديث تلقائي كل 3 ثوانٍ لرصد الأختام فور إضافتها من صفحة الموظف
     setInterval(fetchCard, 3000);
   </script>
 </body>
